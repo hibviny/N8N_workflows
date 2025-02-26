@@ -1,0 +1,176 @@
+{
+  "name": "Principal",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -420,
+        -100
+      ],
+      "id": "ed3c6a6f-3304-4a83-9435-45b4935e3cdf",
+      "name": "When chat message received",
+      "webhookId": "f75d7195-31f1-4a43-b7e6-fc9c966a324f"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -300,
+        180
+      ],
+      "id": "6ebd35d2-7e28-44bd-ba3c-5c5fa7794e09",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Vms6l5jrRKexcFVR",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Atue como um assistente financeiro ajudando o usuário no controle de gastos pessoais, sempre que o usuário solicitar algo chame a tool \"iterageBancoDados\". Sempre busque os valores dessa tool, nunca da memória."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -200,
+        -100
+      ],
+      "id": "d4525a50-f7a5-4720-9344-019969cd101c",
+      "name": "Assistente financeiro"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -100,
+        160
+      ],
+      "id": "b7d4ef20-47e9-40ab-8113-f2d35fe3a6de",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "eOQlPuMVq1OCxu2o",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "iterageBancoDados",
+        "description": "Chame essa TOOL sempre que precisar interagir com o banco de dados, seja para inserir um dado, consultar, remover entre outros.",
+        "workflowId": {
+          "__rl": true,
+          "value": "wtedsokkalGmXbeS",
+          "mode": "list",
+          "cachedResultName": "TOOL - Interage com o banco de dados"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "prompt": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('prompt', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "prompt"
+          ],
+          "schema": [
+            {
+              "id": "prompt",
+              "displayName": "prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        80,
+        160
+      ],
+      "id": "d487ab83-eb07-4ab0-8660-cc741fcb4c13",
+      "name": "Interage com o banco de dados"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Assistente financeiro",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Assistente financeiro",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Assistente financeiro",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interage com o banco de dados": {
+      "ai_tool": [
+        [
+          {
+            "node": "Assistente financeiro",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8623d190-fdf9-435b-a993-e55f48f7392d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b2b6f3b9ca2a77dbe11aaacd44ec06c04470f8b73d2d7823dd50b824d9bde3ed"
+  },
+  "id": "hb4pE1M8Xgqc09Cb",
+  "tags": []
+}

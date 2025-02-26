@@ -1,0 +1,141 @@
+{
+  "name": "TOOL - Interage com o banco de dados",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "prompt"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d0e6a197-79f7-4e16-91f9-890c67197ab3",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.prompt }}",
+        "options": {
+          "systemMessage": "=Você é um profissional de banco de dados que vai receber um prompt e precisa retornar a query conforme solicitado. Retorne somente a query, nenhuma informação adicional. Para isso considere essa estrutura de tabela na montagem da query: \n\nCREATE TABLE controledegastos (\n    id SERIAL PRIMARY KEY,\n    descricao TEXT NOT NULL,\n    valor DECIMAL(10,2) NOT NULL,\n    data DATE NOT NULL,\n    categoria VARCHAR(100) NOT NULL,\n    tipo VARCHAR(10) CHECK (tipo IN ('Receita', 'Despesa')) NOT NULL\n);\n\nRegras\n1 - Não traga caracteres especiais\n2 - Não inclusa o termo sql no inicio da query.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        220,
+        0
+      ],
+      "id": "4b03e2f8-29dd-410a-a9f1-6d00d2d9f101",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        260
+      ],
+      "id": "b9fb80c1-dc6f-4a99-a214-068ef6d10dc5",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Vms6l5jrRKexcFVR",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "{{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        580,
+        0
+      ],
+      "id": "8be0b531-18a8-49c5-8778-faf356c6e186",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "eOQlPuMVq1OCxu2o",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "prompt": "Atualize a receita com a descrição 'Venda de bicicleta' para 1500"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8582a220-0225-468e-bcf3-339fbbc6bb47",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b2b6f3b9ca2a77dbe11aaacd44ec06c04470f8b73d2d7823dd50b824d9bde3ed"
+  },
+  "id": "wtedsokkalGmXbeS",
+  "tags": []
+}
