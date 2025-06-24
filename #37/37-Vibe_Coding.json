@@ -1,0 +1,126 @@
+{
+  "name": "Vibe Coding",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bf980d8c-af45-4eb2-abac-cb8f83750ac4",
+      "name": "When chat message received",
+      "webhookId": "0d56400d-7493-40cc-80b6-c7dca7a74e7a"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=Você é um gerador de fluxos JSON para o n8n. Crie fluxos válidos e completos, obedecendo rigidamente ao formato e estrutura exigidos pela plataforma.\n\nRegras:\nA saída deve ser um JSON 100% compatível com n8n, pronto para importação.\n\nInclua os seguintes elementos obrigatórios:\n\n\"name\" (nome do fluxo),\n\n\"nodes\" (lista de nós),\n\n\"connections\" (ligações entre nós),\n\n\"settings\", \"active\", \"tags\", \"meta\", \"id\", \"versionId\", \"pinData\" (mesmo que vazio, se necessário).\n\nUse UUIDs válidos como id de cada nó.\n\nPara cada \"type\" de nó (ex: \"n8n-nodes-base.manualTrigger\", \"n8n-nodes-base.if\", \"@n8n/n8n-nodes-langchain.agent\"), siga fielmente a estrutura de \"parameters\", \"typeVersion\", \"position\" etc., como nos exemplos fornecidos.\n\nOs \"connections\" devem seguir o padrão:\n\njson\nCopy\nEdit\n\"connections\": {\n  \"Nome do nó origem\": {\n    \"main\": [[{ \"node\": \"Nome do nó destino\", \"type\": \"main\", \"index\": 0 }]]\n  }\n}\nPosicione corretamente os nós (valores em \"position\" devem fazer sentido visualmente).\n\nQuando usar nós de código ou chat, certifique-se de incluir \"parameters\", \"credentials\" e \"webhookId\" se exigidos.\n\nCaso o usuário solicite anotações, use \"n8n-nodes-base.stickyNote\".\n\nNunca omita propriedades obrigatórias mesmo que estejam vazias ({}).\n\nO JSON deve estar bem formatado, sem vírgulas extras ou campos mal escritos.\nExemplo:\n{\n  \"name\": \"Nome do meu fluxo\",\n  \"nodes\": [\n    {\n      \"parameters\": {},\n      \"type\": \"n8n-nodes-base.manualTrigger\",\n      \"typeVersion\": 1,\n      \"position\": [0, -60],\n      \"id\": \"22b0d854-bf4e-435b-970e-7a88106c09fe\",\n      \"name\": \"When clicking ‘Execute workflow’\"\n    },\n    {\n      \"parameters\": {\n        \"rule\": {\n          \"interval\": [\n            {\n              \"field\": \"cronExpression\",\n              \"expression\": \"0 10 * * 1,3,5\"\n            }\n          ]\n        }\n      },\n      \"type\": \"n8n-nodes-base.scheduleTrigger\",\n      \"typeVersion\": 1.2,\n      \"position\": [0, 240],\n      \"id\": \"94dc87f8-721d-49e7-9fc7-9ec9637a012c\",\n      \"name\": \"Schedule Trigger\"\n    },\n    {\n      \"parameters\": {},\n      \"type\": \"n8n-nodes-base.noOp\",\n      \"typeVersion\": 1,\n      \"position\": [220, -60],\n      \"id\": \"e3e8adb9-87df-4e4e-a71a-a04f743561e6\",\n      \"name\": \"Faz algo\"\n    },\n    {\n      \"parameters\": {\n        \"conditions\": {\n          \"options\": {\n            \"caseSensitive\": true,\n            \"leftValue\": \"\",\n            \"typeValidation\": \"strict\",\n            \"version\": 2\n          },\n          \"conditions\": [\n            {\n              \"id\": \"4cfb1d6b-2dbc-445b-a011-f295d2ee4f4d\",\n              \"leftValue\": \"\",\n              \"rightValue\": \"\",\n              \"operator\": {\n                \"type\": \"string\",\n                \"operation\": \"equals\",\n                \"name\": \"filter.operator.equals\"\n              }\n            }\n          ],\n          \"combinator\": \"and\"\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.if\",\n      \"typeVersion\": 2.2,\n      \"position\": [440, -60],\n      \"id\": \"b581d921-bb69-4819-bbb7-cc3a7b5434e4\",\n      \"name\": \"If\"\n    },\n    {\n      \"parameters\": {},\n      \"type\": \"n8n-nodes-base.noOp\",\n      \"typeVersion\": 1,\n      \"position\": [720, -180],\n      \"id\": \"61ebf860-c06a-4e8d-9036-c4e6125ba603\",\n      \"name\": \"Fluxo verdadeiro\"\n    },\n    {\n      \"parameters\": {},\n      \"type\": \"n8n-nodes-base.noOp\",\n      \"typeVersion\": 1,\n      \"position\": [720, 40],\n      \"id\": \"7dba696e-8d5d-4c0d-b242-506d1baecb00\",\n      \"name\": \"Fluxo Falso\"\n    },\n    {\n      \"parameters\": {\n        \"options\": {\n          \"systemMessage\": \"Você é um assistente legal\\n\"\n        }\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.agent\",\n      \"typeVersion\": 2,\n      \"position\": [260, 460],\n      \"id\": \"f6045621-8440-4026-ba31-b18b3a45723d\",\n      \"name\": \"AI Agent\"\n    },\n    {\n      \"parameters\": {\n        \"options\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.chatTrigger\",\n      \"typeVersion\": 1.1,\n      \"position\": [0, 460],\n      \"id\": \"d5f23fed-fec8-486f-b572-57d2368d6274\",\n      \"name\": \"When chat message received\",\n      \"webhookId\": \"be0d4c59-d6a6-4e7f-b777-d8659124ee04\"\n    },\n    {\n      \"parameters\": {\n        \"model\": {\n          \"__rl\": true,\n          \"mode\": \"list\",\n          \"value\": \"gpt-4.1-mini\"\n        },\n        \"options\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.lmChatOpenAi\",\n      \"typeVersion\": 1.2,\n      \"position\": [180, 660],\n      \"id\": \"8d31ecf5-15f1-471d-b6e0-7a470467e19b\",\n      \"name\": \"OpenAI Chat Model\",\n      \"credentials\": {\n        \"openAiApi\": {\n          \"id\": \"Vms6l5jrRKexcFVR\",\n          \"name\": \"OpenAi account\"\n        }\n      }\n    },\n    {\n      \"parameters\": {},\n      \"type\": \"n8n-nodes-base.wait\",\n      \"typeVersion\": 1.1,\n      \"position\": [260, 240],\n      \"id\": \"66ab7040-dad3-44cd-b960-f87976884e2b\",\n      \"name\": \"Wait\",\n      \"webhookId\": \"dd7c8cb9-7be0-48ab-b39e-6e5b04741697\"\n    },\n    {\n      \"parameters\": {\n        \"content\": \"## Fluxo de IF\"\n      },\n      \"type\": \"n8n-nodes-base.stickyNote\",\n      \"position\": [20, -280],\n      \"typeVersion\": 1,\n      \"id\": \"3c94e488-078a-485d-98e0-cc14b8a8b0ac\",\n      \"name\": \"Sticky Note\"\n    },\n    {\n      \"parameters\": {\n        \"content\": \"## Gatilho com Wait\"\n      },\n      \"type\": \"n8n-nodes-base.stickyNote\",\n      \"position\": [460, 220],\n      \"typeVersion\": 1,\n      \"id\": \"2e8b554a-4be2-433f-870d-822009353045\",\n      \"name\": \"Sticky Note1\"\n    },\n    {\n      \"parameters\": {\n        \"content\": \"## Chatbot\"\n      },\n      \"type\": \"n8n-nodes-base.stickyNote\",\n      \"position\": [640, 440],\n      \"typeVersion\": 1,\n      \"id\": \"a629431f-8833-4357-ac1d-f3090964bac1\",\n      \"name\": \"Sticky Note2\"\n    },\n    {\n      \"parameters\": {\n        \"rule\": {\n          \"interval\": [\n            {}\n          ]\n        }\n      },\n      \"type\": \"n8n-nodes-base.scheduleTrigger\",\n      \"typeVersion\": 1.2,\n      \"position\": [1260, -180],\n      \"id\": \"2e8370e3-41b1-490c-a3a1-f456dbb59a23\",\n      \"name\": \"Schedule Trigger1\"\n    },\n    {\n      \"parameters\": {\n        \"operation\": \"executeQuery\",\n        \"query\": \"select top 100 * from clientes\"\n      },\n      \"type\": \"n8n-nodes-base.microsoftSql\",\n      \"typeVersion\": 1.1,\n      \"position\": [1480, -180],\n      \"id\": \"26f92258-6240-4772-8ea8-90d91082a0a4\",\n      \"name\": \"Microsoft SQL\"\n    },\n    {\n      \"parameters\": {\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.splitInBatches\",\n      \"typeVersion\": 3,\n      \"position\": [1260, 200],\n      \"id\": \"b404f1e9-2b84-41e2-9067-e6503e90943f\",\n      \"name\": \"Loop Over Items\"\n    },\n    {\n      \"parameters\": {},\n      \"type\": \"n8n-nodes-base.noOp\",\n      \"name\": \"Replace Me\",\n      \"typeVersion\": 1,\n      \"position\": [1640, 220],\n      \"id\": \"8b9098eb-a439-47c5-9ca3-a9cf13b08ac5\"\n    },\n    {\n      \"parameters\": {\n        \"jsCode\": \"// Loop over input items and add a new field called 'myNewField' to the JSON of each one\\nfor (const item of $input.all()) {\\n  item.json.myNewField = 1;\\n}\\n\\nreturn $input.all();\"\n      },\n      \"type\": \"n8n-nodes-base.code\",\n      \"typeVersion\": 2,\n      \"position\": [1880, -140],\n      \"id\": \"326a0284-0fae-4690-80b6-3b5009d66f6a\",\n      \"name\": \"Code\"\n    },\n    {\n      \"parameters\": {\n        \"conditions\": {\n          \"options\": {\n            \"caseSensitive\": true,\n            \"leftValue\": \"\",\n            \"typeValidation\": \"strict\",\n            \"version\": 2\n          },\n          \"conditions\": [\n            {\n              \"id\": \"9b5f2f45-621b-4b5c-a72f-43164ce135a6\",\n              \"leftValue\": \"\",\n              \"rightValue\": \"\",\n              \"operator\": {\n                \"type\": \"string\",\n                \"operation\": \"equals\",\n                \"name\": \"filter.operator.equals\"\n              }\n            }\n          ],\n          \"combinator\": \"and\"\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.filter\",\n      \"typeVersion\": 2.2,\n      \"position\": [2060, 140],\n      \"id\": \"9b4179dc-ed74-4e9d-9f57-057d8eecd45a\",\n      \"name\": \"Filter\"\n    },\n    {\n      \"parameters\": {},\n      \"type\": \"n8n-nodes-base.merge\",\n      \"typeVersion\": 3.2,\n      \"position\": [2120, 440],\n      \"id\": \"f9988533-f657-408f-a923-baa96c5985d6\",\n      \"name\": \"Merge\"\n    },\n    {\n      \"parameters\": {\n        \"rules\": {\n          \"values\": [\n            {\n              \"conditions\": {\n                \"options\": {\n                  \"caseSensitive\": true,\n                  \"leftValue\": \"\",\n                  \"typeValidation\": \"strict\",\n                  \"version\": 2\n                },\n                \"conditions\": [\n                  {\n                    \"leftValue\": \"\",\n                    \"rightValue\": \"\",\n                    \"operator\": {\n                      \"type\": \"string\",\n                      \"operation\": \"equals\"\n                    },\n                    \"id\": \"06c71bec-6ecf-4b48-bdcd-1c1cdbb7006b\"\n                  }\n                ],\n                \"combinator\": \"and\"\n              }\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"type\": \"n8n-nodes-base.switch\",\n      \"typeVersion\": 3.2,\n      \"position\": [2400, 260],\n      \"id\": \"e85b5d9e-7051-4572-9b7d-77303b7d0439\",\n      \"name\": \"Switch\"\n    },\n    {\n      \"parameters\": {\n        \"rule\": {\n          \"interval\": [\n            {\n              \"field\": \"cronExpression\",\n              \"expression\": \"0 10 * * 1,3,5\"\n            }\n          ]\n        }\n      },\n      \"type\": \"n8n-nodes-base.scheduleTrigger\",\n      \"typeVersion\": 1.2,\n      \"position\": [0, 320],\n      \"id\": \"6244c32c-3cee-4f2f-8d18-9b2dd2711e5b\",\n      \"name\": \"Schedule Trigger Extra\"\n    }\n  ],\n  \"connections\": {\n    \"When clicking ‘Execute workflow’\": {\n      \"main\": [[{ \"node\": \"Faz algo\", \"type\": \"main\", \"index\": 0 }]]\n    },\n    \"Faz algo\": {\n      \"main\": [[{ \"node\": \"If\", \"type\": \"main\", \"index\": 0 }]]\n    },\n    \"If\": {\n      \"main\": [\n        [{ \"node\": \"Fluxo verdadeiro\", \"type\": \"main\", \"index\": 0 }],\n        [{ \"node\": \"Fluxo Falso\", \"type\": \"main\", \"index\": 0 }]\n      ]\n    },\n    \"When chat message received\": {\n      \"main\": [[{ \"node\": \"AI Agent\", \"type\": \"main\", \"index\": 0 }]]\n    },\n    \"OpenAI Chat Model\": {\n      \"ai_languageModel\": [[{ \"node\": \"AI Agent\", \"type\": \"ai_languageModel\", \"index\": 0 }]]\n    },\n    \"Schedule Trigger\": {\n      \"main\": [[{ \"node\": \"Wait\", \"type\": \"main\", \"index\": 0 }]]\n    },\n    \"Schedule Trigger1\": {\n      \"main\": [[{ \"node\": \"Microsoft SQL\", \"type\": \"main\", \"index\": 0 }]]\n    },\n    \"Loop Over Items\": {\n      \"main\": [[], [{ \"node\": \"Replace Me\", \"type\": \"main\", \"index\": 0 }]]\n    },\n    \"Replace Me\": {\n      \"main\": [[{ \"node\": \"Loop Over Items\", \"type\": \"main\", \"index\": 0 }]]\n    },\n    \"Schedule Trigger Extra\": {\n      \"main\": [[]]\n    }\n  },\n  \"pinData\": {\n    \"When clicking ‘Execute workflow’\": [\n      { \"json\": { \"cliente\": \"Vinícius\" } },\n      { \"json\": { \"cliente\": \"Heloísa\" } }\n    ]\n  },\n  \"active\": false,\n  \"settings\": {\n    \"executionOrder\": \"v1\",\n    \"timezone\": \"America/Sao_Paulo\"\n  },\n  \"versionId\": \"813d37ae-cb08-4ee3-8ac8-3af050f681cf\",\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"b2b6f3b9ca2a77dbe11aaacd44ec06c04470f8b73d2d7823dd50b824d9bde3ed\"\n  },\n  \"id\": \"BQU8OEYe67isJnvl\",\n  \"tags\": []\n}\n\nOutros detalhes\n{\n  \"nodes\": [\n    {\n      \"parameters\": {\n        \"options\": {\n          \"systemMessage\": \"Você é um assistente virtual de uma pizzaria. Atue com cortesia e eficiência para ajudar o cliente. \\n\\nSeja amigável e profissional.\\n\\n**Você pode ajudar com:**\\n- Cardápio e sugestões de pizzas, adicionais e bebidas;\\n- Informações sobre preços, promoções e formas de pagamento;\\n- Horários de funcionamento e endereço;\\n- Processar pedidos (pegue dados e confirme o pedido);\\n- Informar tempo aproximado de entrega ou retirada;\\n- Responder dúvidas frequentes;\\n\\n**Por favor, confirme o pedido antes de finalizar**.\\n\\n**Exemplo de boas práticas:**\\nCliente: Gostaria de uma pizza média de calabresa.\\nVocê: Ótima escolha! Deseja adicionar algum adicional? Beber alguma coisa?\\n\\nCliente: Sim, uma coca-cola.\\nVocê: Pedido confirmado: pizza média calabresa e uma coca-cola. Qual endereço para entrega?\\n\\nSempre peça confirmação para finalizar o pedido.\"\n        }\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.agent\",\n      \"typeVersion\": 2,\n      \"position\": [\n        320,\n        160\n      ],\n      \"id\": \"d23b0181-54e6-4ffa-b705-088b8df3e7f0\",\n      \"name\": \"Agente Pizzaria\"\n    },\n    {\n      \"parameters\": {},\n      \"type\": \"@n8n/n8n-nodes-langchain.chatTrigger\",\n      \"typeVersion\": 1,\n      \"position\": [\n        0,\n        160\n      ],\n      \"id\": \"c82f2f3b-4f48-4e9a-bc2c-316820e8e7e6\",\n      \"name\": \"Chat Trigger\",\n      \"webhookId\": \"9ccc8e7c-1234-4f26-8c7d-e837d65e912b\"\n    },\n    {\n      \"parameters\": {\n        \"model\": {\n          \"__rl\": true,\n          \"mode\": \"list\",\n          \"value\": \"gpt-4.1-mini\"\n        },\n        \"options\": {}\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.lmChatOpenAi\",\n      \"typeVersion\": 1.2,\n      \"position\": [\n        260,\n        440\n      ],\n      \"id\": \"8ec760e3-b4c6-4da8-9c7e-398e0bed646c\",\n      \"name\": \"OpenAI Chat Model\",\n      \"credentials\": {\n        \"openAiApi\": {\n          \"id\": \"Vms6l5jrRKexcFVR\",\n          \"name\": \"OpenAi account\"\n        }\n      }\n    }\n  ],\n  \"connections\": {\n    \"Chat Trigger\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Agente Pizzaria\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"OpenAI Chat Model\": {\n      \"ai_languageModel\": [\n        [\n          {\n            \"node\": \"Agente Pizzaria\",\n            \"type\": \"ai_languageModel\",\n            \"index\": 0\n          }\n        ]\n      ]\n    }\n  },\n  \"pinData\": {},\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"b2b6f3b9ca2a77dbe11aaacd44ec06c04470f8b73d2d7823dd50b824d9bde3ed\"\n  }\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "bcf51dff-6962-422d-9e4e-9cc2602450e8",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        220
+      ],
+      "id": "2edc9eb7-e696-4dc0-a08c-74cfca8ed9ed",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Vms6l5jrRKexcFVR",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "workflowObject": "={{ $json.output }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.n8n",
+      "typeVersion": 1,
+      "position": [
+        580,
+        0
+      ],
+      "id": "1cb41758-5bc8-4bae-9c91-cfa406becefc",
+      "name": "Create a workflow",
+      "credentials": {
+        "n8nApi": {
+          "id": "ArjAA0GbtfbguNM2",
+          "name": "n8n account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "436a4926-b3d6-4ef3-a635-521468601b72",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b2b6f3b9ca2a77dbe11aaacd44ec06c04470f8b73d2d7823dd50b824d9bde3ed"
+  },
+  "id": "MZm73yySEGD8djPS",
+  "tags": []
+}
