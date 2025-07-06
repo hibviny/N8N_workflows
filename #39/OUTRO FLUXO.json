@@ -1,0 +1,88 @@
+{
+  "name": "OUTRO FLUXO",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        180,
+        320
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        320
+      ],
+      "id": "8de477b1-42e3-4783-9d9d-4df3c1ffde10",
+      "name": "Wait",
+      "webhookId": "155c6bc9-b5c3-4803-b093-1932b414dedd"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "879b5171-0a85-40f9-a4b5-b3fe0c451137",
+              "name": "return",
+              "value": "RETORNOU ALGO",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        620,
+        320
+      ],
+      "id": "ddf66124-ff39-4073-a553-5037cfb6e879",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "36f12439-7264-4d4b-9290-beaec51c2331",
+  "meta": {
+    "instanceId": "37b55dae9961a8f6e4bc02e214017a4a4b2cf0dd5bc9caf78af39ff6939a20e2"
+  },
+  "id": "wjzCeT5H5iRv6Uok",
+  "tags": []
+}

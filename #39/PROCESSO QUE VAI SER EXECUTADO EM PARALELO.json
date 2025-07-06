@@ -1,0 +1,214 @@
+{
+  "name": "PROCESSO QUE VAI SER EXECUTADO EM PARALELO",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "TEMPO",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        180,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{ $json.TEMPO }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        400,
+        340
+      ],
+      "id": "18c5adbb-17f0-4509-8d66-2c09e99dd0a9",
+      "name": "Wait",
+      "webhookId": "b4e593eb-ac8e-4972-8cda-b2ed30cd56a6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/set-var",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chave",
+              "value": "CONTADOR"
+            },
+            {
+              "name": "valor",
+              "value": "=-1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        840,
+        340
+      ],
+      "id": "065014d0-cfb1-4fca-aeb2-863cbe554170",
+      "name": "SET"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b149656b-32d8-42ed-afe7-370a2a1d58d8",
+              "leftValue": "={{ $('GET').item.json.valor }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1060,
+        340
+      ],
+      "id": "78cbaad7-dc47-440a-a5cf-db2ed9a34aed",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5678/webhook/get-var",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "chave",
+              "value": "CONTADOR"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        340
+      ],
+      "id": "d23de133-ba0d-495b-90eb-bb8019a2b9b0",
+      "name": "GET"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5678/webhook/297aa6bd-7c94-4ee8-82cf-bed4e87e710f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        320
+      ],
+      "id": "e073321d-174a-4783-8b39-e1e334522345",
+      "name": "Chama fluxo principal"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "TEMPO": 15
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "GET",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Chama fluxo principal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "GET": {
+      "main": [
+        [
+          {
+            "node": "SET",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "136defd0-b4cd-4d2c-90fb-9af080a81e01",
+  "meta": {
+    "instanceId": "37b55dae9961a8f6e4bc02e214017a4a4b2cf0dd5bc9caf78af39ff6939a20e2"
+  },
+  "id": "cS3x5sMv5YBxscZI",
+  "tags": []
+}

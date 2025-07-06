@@ -1,0 +1,264 @@
+{
+  "name": "VARIAVEL GLOBAL",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "set-var",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "6b51d9b7-78c4-4135-932d-4b0d62284162",
+      "name": "Webhook Set",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "6bb8b3cf-27e3-4c5f-aacf-b21b0ea1935e"
+    },
+    {
+      "parameters": {
+        "functionCode": "const key = $json[\"chave\"];\nconst delta = Number($json[\"valor\"]); // pode ser positivo ou negativo\n\nconst data = getWorkflowStaticData(\"global\");\n\n// Pega o valor atual, ou inicia em 0\nconst current = Number(data[key] || 0);\n\n// Aplica incremento ou decremento\nconst new_value = current + delta;\n\n// Salva o novo valor\ndata[key] = new_value;\n\n// Retorna o resultado\nreturn [{ json: { status: \"OK\", chave: key, anterior: current, alteracao: delta, valor: new_value } }];\n\n\n// Retorna\nreturn [{ json: { status: \"OK\", chave: key, valor: new_value } }];\n"
+      },
+      "id": "bd38df5c-2ab9-459d-9fe9-5ff3223d0e99",
+      "name": "Salvar em Memória",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        440,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "path": "get-var",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "7c139176-b9dd-4b51-a0c1-3dde352c8aa6",
+      "name": "Webhook Get",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        260
+      ],
+      "webhookId": "02227d62-e527-41dd-8911-a991e8cc8265"
+    },
+    {
+      "parameters": {
+        "functionCode": "const key = $json[\"chave\"];\nconst data = getWorkflowStaticData(\"global\");;\n\nconst value = data[key] || null;\n\nreturn [{ json: { chave: key, valor: value } }];"
+      },
+      "id": "b010e148-53e1-4416-9be2-58cdbb2dd30b",
+      "name": "Ler da Memória",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        440,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        660,
+        260
+      ],
+      "id": "c8de843d-be45-4669-b78b-4a81043b75f8",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        660,
+        0
+      ],
+      "id": "992bee47-f703-47f2-a819-bb51175c3f71",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ddd4e60a-cf04-47fd-8cb8-f2dd8705a616",
+              "name": "chave",
+              "value": "={{ $json.body.chave }}",
+              "type": "string"
+            },
+            {
+              "id": "a8de5449-6d10-4a1b-8283-ec8e611f1401",
+              "name": "valor",
+              "value": "={{ $json.body.valor }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        0
+      ],
+      "id": "71eeb1f8-ba28-44e8-a82a-5dd8a0a37b17",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f6baa7ac-d084-4f0a-a497-9dae357971f5",
+              "name": "chave",
+              "value": "={{ $json.query.chave }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        260
+      ],
+      "id": "1912c922-27b3-4aa3-ae9a-c6496006c18b",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {
+    "Webhook Get": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "user-agent": "axios/1.8.3",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "close"
+          },
+          "params": {},
+          "query": {
+            "chave": "Contador"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/get-var",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Webhook Set": [
+      {
+        "json": {
+          "headers": {
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-type": "application/json",
+            "user-agent": "axios/1.8.3",
+            "content-length": "32",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "host": "localhost:5678",
+            "connection": "close"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "chave": "CONTADOR",
+            "valor": "1"
+          },
+          "webhookUrl": "http://localhost:5678/webhook/set-var",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook Set": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Get": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ler da Memória": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Salvar em Memória": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Salvar em Memória",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Ler da Memória",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9bbe6bf8-9661-4274-a577-1bdbd2e91976",
+  "meta": {
+    "instanceId": "37b55dae9961a8f6e4bc02e214017a4a4b2cf0dd5bc9caf78af39ff6939a20e2"
+  },
+  "id": "RHPRchQz9oNY16fD",
+  "tags": []
+}

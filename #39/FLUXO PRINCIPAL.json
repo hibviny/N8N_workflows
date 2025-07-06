@@ -1,0 +1,248 @@
+{
+  "name": "FLUXO PRINCIPAL",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -640,
+        120
+      ],
+      "id": "c09fa3da-6254-4dce-846e-cf49f45d8929",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -360,
+        120
+      ],
+      "id": "ff5ea779-a7ee-432b-8d1d-ded5161d9985",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/set-var",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chave",
+              "value": "CONTADOR"
+            },
+            {
+              "name": "valor",
+              "value": "=1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        140
+      ],
+      "id": "d95bedb1-043e-456f-8164-934253691ba1",
+      "name": "SET"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "cS3x5sMv5YBxscZI",
+          "mode": "list",
+          "cachedResultName": "PROCESSO QUE VAI SER EXECUTADO EM PARALELO"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "TEMPO": "={{ $('When clicking ‘Execute workflow’').item.json.tempo }}"
+          },
+          "matchingColumns": [
+            "TEMPO"
+          ],
+          "schema": [
+            {
+              "id": "TEMPO",
+              "displayName": "TEMPO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        140
+      ],
+      "id": "e517e057-6e74-4a0a-86da-18438312364b",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        780,
+        140
+      ],
+      "id": "5a066729-d1b3-46bf-80d4-d7fd65bc84d1",
+      "name": "Continua Fluxo"
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1000,
+        140
+      ],
+      "id": "395a55c6-1df1-4134-a968-8c2eee957cc6",
+      "name": "Wait",
+      "webhookId": "615ed63c-ea1b-4ca5-a456-16a36a4fcdca"
+    },
+    {
+      "parameters": {
+        "path": "297aa6bd-7c94-4ee8-82cf-bed4e87e710f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        580,
+        140
+      ],
+      "id": "7f003d4e-3998-4ddb-a7ff-3cd37cd3a48a",
+      "name": "Webhook",
+      "webhookId": "297aa6bd-7c94-4ee8-82cf-bed4e87e710f"
+    }
+  ],
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {
+          "processo": "Processo 1",
+          "tempo": 10
+        }
+      },
+      {
+        "json": {
+          "processo": "Processo 2",
+          "tempo": 15
+        }
+      },
+      {
+        "json": {
+          "processo": "Processo 3",
+          "tempo": 20
+        }
+      },
+      {
+        "json": {
+          "processo": "Processo 4",
+          "tempo": 25
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "SET",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SET": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Continua Fluxo": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Continua Fluxo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "35525534-0428-4282-b885-71a41417e33e",
+  "meta": {
+    "instanceId": "37b55dae9961a8f6e4bc02e214017a4a4b2cf0dd5bc9caf78af39ff6939a20e2"
+  },
+  "id": "8WJI2PFjIQqZmJ8G",
+  "tags": []
+}

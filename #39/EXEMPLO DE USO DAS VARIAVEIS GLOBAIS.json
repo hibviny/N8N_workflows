@@ -1,0 +1,96 @@
+{
+  "name": "EXEMPLO DE USO DAS VARIAVEIS GLOBAIS",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "cc9a7b75-4dcd-4c66-a0bf-c90f73f369d8",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:5678/webhook/set-var",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chave",
+              "value": "CONTADOR"
+            },
+            {
+              "name": "valor",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        -80
+      ],
+      "id": "c0ceb238-a9a2-4ed8-bcf9-3a02d1f44899",
+      "name": "SET"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:5678/webhook/get-var",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "chave",
+              "value": "CONTADOR"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        140
+      ],
+      "id": "5b5f14bd-38cf-48b6-8014-c312e4c9c649",
+      "name": "GET"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "SET",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "GET",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5284fbfa-ad99-46f5-ab79-d40392f19e33",
+  "meta": {
+    "instanceId": "37b55dae9961a8f6e4bc02e214017a4a4b2cf0dd5bc9caf78af39ff6939a20e2"
+  },
+  "id": "tJ5ujqijStqigMxy",
+  "tags": []
+}
